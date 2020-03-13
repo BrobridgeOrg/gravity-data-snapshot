@@ -1,0 +1,9 @@
+[service]
+port = 44446
+
+[event_store]
+host = "0.0.0.0:32803"
+cluster_id = "test-cluster"
+
+[database]
+dbpath = "./db"
