@@ -43,6 +43,7 @@ func CreateService(a app.AppImpl) *Service {
 		var projection Projection
 		err := json.Unmarshal(msg.Data, &projection)
 		if err != nil {
+			msg.Ack()
 			return
 		}
 
@@ -51,6 +52,8 @@ func CreateService(a app.AppImpl) *Service {
 		if db == nil {
 			return
 		}
+
+		msg.Ack()
 
 		err = db.ProcessData(msg.Sequence, &projection)
 		if err != nil {
