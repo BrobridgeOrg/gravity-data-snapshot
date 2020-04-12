@@ -186,21 +186,31 @@ func (database *Database) FetchSnapshot(stream pb.DataSnapshot_GetSnapshotServer
 	}).Info("Client requests data")
 
 	iter := snapshot.NewIterator(util.BytesPrefix([]byte("key-")), nil)
-	//	iter := database.db.NewIterator(nil, nil)
+
+	// Prepare packet
+	packet := &pb.SnapshotPacket{
+		Collection: database.name,
+		Sequence:   seq,
+		Entries:    make([]*pb.SnapshotEntry, 0),
+	}
+
 	for iter.Next() {
-		entry := pb.SnapshotEntry{
+
+		entry := &pb.SnapshotEntry{
 			Data: string(iter.Value()),
 		}
 
-		var packet pb.SnapshotPacket
+		packet.Entries = append(packet.Entries, entry)
 
-		packet.Collection = database.name
-		packet.Sequence = seq
-		packet.Entries = []*pb.SnapshotEntry{
-			&entry,
+		if len(packet.Entries) >= 100 {
+			stream.Send(packet)
+			packet.Entries = make([]*pb.SnapshotEntry, 0)
 		}
+	}
 
-		stream.Send(&packet)
+	// Send entries if buffer has data still
+	if len(packet.Entries) > 0 {
+		stream.Send(packet)
 	}
 
 	err = iter.Error()

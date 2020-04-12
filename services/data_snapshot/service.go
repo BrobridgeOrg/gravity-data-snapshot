@@ -25,10 +25,10 @@ type Field struct {
 }
 
 type Projection struct {
-	EventName string  `json:"event"`
-	Table     string  `json:"table"`
-	Method    string  `json:"method"`
-	Fields    []Field `json:"fields"`
+	EventName  string  `json:"event"`
+	Collection string  `json:"collection"`
+	Method     string  `json:"method"`
+	Fields     []Field `json:"fields"`
 }
 
 func CreateService(a app.AppImpl) *Service {
@@ -50,8 +50,8 @@ func CreateService(a app.AppImpl) *Service {
 			return
 		}
 
-		// Getting database for specific table
-		db := dm.GetDatabase(projection.Table)
+		// Getting database for specific collection
+		db := dm.GetDatabase(projection.Collection)
 		if db == nil {
 			return
 		}
