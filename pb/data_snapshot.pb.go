@@ -24,7 +24,94 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type GetSnapshotStateRequest struct {
+	Collection           string   `protobuf:"bytes,1,opt,name=collection,proto3" json:"collection,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetSnapshotStateRequest) Reset()         { *m = GetSnapshotStateRequest{} }
+func (m *GetSnapshotStateRequest) String() string { return proto.CompactTextString(m) }
+func (*GetSnapshotStateRequest) ProtoMessage()    {}
+func (*GetSnapshotStateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dabcf68fbf5d8713, []int{0}
+}
+
+func (m *GetSnapshotStateRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetSnapshotStateRequest.Unmarshal(m, b)
+}
+func (m *GetSnapshotStateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetSnapshotStateRequest.Marshal(b, m, deterministic)
+}
+func (m *GetSnapshotStateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSnapshotStateRequest.Merge(m, src)
+}
+func (m *GetSnapshotStateRequest) XXX_Size() int {
+	return xxx_messageInfo_GetSnapshotStateRequest.Size(m)
+}
+func (m *GetSnapshotStateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSnapshotStateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSnapshotStateRequest proto.InternalMessageInfo
+
+func (m *GetSnapshotStateRequest) GetCollection() string {
+	if m != nil {
+		return m.Collection
+	}
+	return ""
+}
+
+type GetSnapshotStateReply struct {
+	Collection           string   `protobuf:"bytes,1,opt,name=collection,proto3" json:"collection,omitempty"`
+	Sequence             uint64   `protobuf:"varint,2,opt,name=sequence,proto3" json:"sequence,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetSnapshotStateReply) Reset()         { *m = GetSnapshotStateReply{} }
+func (m *GetSnapshotStateReply) String() string { return proto.CompactTextString(m) }
+func (*GetSnapshotStateReply) ProtoMessage()    {}
+func (*GetSnapshotStateReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dabcf68fbf5d8713, []int{1}
+}
+
+func (m *GetSnapshotStateReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetSnapshotStateReply.Unmarshal(m, b)
+}
+func (m *GetSnapshotStateReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetSnapshotStateReply.Marshal(b, m, deterministic)
+}
+func (m *GetSnapshotStateReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSnapshotStateReply.Merge(m, src)
+}
+func (m *GetSnapshotStateReply) XXX_Size() int {
+	return xxx_messageInfo_GetSnapshotStateReply.Size(m)
+}
+func (m *GetSnapshotStateReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSnapshotStateReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSnapshotStateReply proto.InternalMessageInfo
+
+func (m *GetSnapshotStateReply) GetCollection() string {
+	if m != nil {
+		return m.Collection
+	}
+	return ""
+}
+
+func (m *GetSnapshotStateReply) GetSequence() uint64 {
+	if m != nil {
+		return m.Sequence
+	}
+	return 0
+}
+
 type GetSnapshotRequest struct {
+	Collection           string   `protobuf:"bytes,1,opt,name=collection,proto3" json:"collection,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -34,7 +121,7 @@ func (m *GetSnapshotRequest) Reset()         { *m = GetSnapshotRequest{} }
 func (m *GetSnapshotRequest) String() string { return proto.CompactTextString(m) }
 func (*GetSnapshotRequest) ProtoMessage()    {}
 func (*GetSnapshotRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dabcf68fbf5d8713, []int{0}
+	return fileDescriptor_dabcf68fbf5d8713, []int{2}
 }
 
 func (m *GetSnapshotRequest) XXX_Unmarshal(b []byte) error {
@@ -55,9 +142,17 @@ func (m *GetSnapshotRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSnapshotRequest proto.InternalMessageInfo
 
+func (m *GetSnapshotRequest) GetCollection() string {
+	if m != nil {
+		return m.Collection
+	}
+	return ""
+}
+
 type SnapshotPacket struct {
-	Sequence             uint64           `protobuf:"varint,1,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	Entries              []*SnapshotEntry `protobuf:"bytes,2,rep,name=entries,proto3" json:"entries,omitempty"`
+	Collection           string           `protobuf:"bytes,1,opt,name=collection,proto3" json:"collection,omitempty"`
+	Sequence             uint64           `protobuf:"varint,2,opt,name=sequence,proto3" json:"sequence,omitempty"`
+	Entries              []*SnapshotEntry `protobuf:"bytes,3,rep,name=entries,proto3" json:"entries,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
@@ -67,7 +162,7 @@ func (m *SnapshotPacket) Reset()         { *m = SnapshotPacket{} }
 func (m *SnapshotPacket) String() string { return proto.CompactTextString(m) }
 func (*SnapshotPacket) ProtoMessage()    {}
 func (*SnapshotPacket) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dabcf68fbf5d8713, []int{1}
+	return fileDescriptor_dabcf68fbf5d8713, []int{3}
 }
 
 func (m *SnapshotPacket) XXX_Unmarshal(b []byte) error {
@@ -88,6 +183,13 @@ func (m *SnapshotPacket) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SnapshotPacket proto.InternalMessageInfo
 
+func (m *SnapshotPacket) GetCollection() string {
+	if m != nil {
+		return m.Collection
+	}
+	return ""
+}
+
 func (m *SnapshotPacket) GetSequence() uint64 {
 	if m != nil {
 		return m.Sequence
@@ -103,8 +205,7 @@ func (m *SnapshotPacket) GetEntries() []*SnapshotEntry {
 }
 
 type SnapshotEntry struct {
-	Table                string   `protobuf:"bytes,1,opt,name=table,proto3" json:"table,omitempty"`
-	Data                 string   `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	Data                 string   `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -114,7 +215,7 @@ func (m *SnapshotEntry) Reset()         { *m = SnapshotEntry{} }
 func (m *SnapshotEntry) String() string { return proto.CompactTextString(m) }
 func (*SnapshotEntry) ProtoMessage()    {}
 func (*SnapshotEntry) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dabcf68fbf5d8713, []int{2}
+	return fileDescriptor_dabcf68fbf5d8713, []int{4}
 }
 
 func (m *SnapshotEntry) XXX_Unmarshal(b []byte) error {
@@ -135,13 +236,6 @@ func (m *SnapshotEntry) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SnapshotEntry proto.InternalMessageInfo
 
-func (m *SnapshotEntry) GetTable() string {
-	if m != nil {
-		return m.Table
-	}
-	return ""
-}
-
 func (m *SnapshotEntry) GetData() string {
 	if m != nil {
 		return m.Data
@@ -150,6 +244,8 @@ func (m *SnapshotEntry) GetData() string {
 }
 
 func init() {
+	proto.RegisterType((*GetSnapshotStateRequest)(nil), "gravity.GetSnapshotStateRequest")
+	proto.RegisterType((*GetSnapshotStateReply)(nil), "gravity.GetSnapshotStateReply")
 	proto.RegisterType((*GetSnapshotRequest)(nil), "gravity.GetSnapshotRequest")
 	proto.RegisterType((*SnapshotPacket)(nil), "gravity.SnapshotPacket")
 	proto.RegisterType((*SnapshotEntry)(nil), "gravity.SnapshotEntry")
@@ -158,20 +254,24 @@ func init() {
 func init() { proto.RegisterFile("data_snapshot.proto", fileDescriptor_dabcf68fbf5d8713) }
 
 var fileDescriptor_dabcf68fbf5d8713 = []byte{
-	// 205 bytes of a gzipped FileDescriptorProto
+	// 263 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4e, 0x49, 0x2c, 0x49,
 	0x8c, 0x2f, 0xce, 0x4b, 0x2c, 0x28, 0xce, 0xc8, 0x2f, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17,
-	0x62, 0x4f, 0x2f, 0x4a, 0x2c, 0xcb, 0x2c, 0xa9, 0x54, 0x12, 0xe1, 0x12, 0x72, 0x4f, 0x2d, 0x09,
-	0x86, 0xca, 0x06, 0xa5, 0x16, 0x96, 0xa6, 0x16, 0x97, 0x28, 0xc5, 0x71, 0xf1, 0xc1, 0x84, 0x02,
-	0x12, 0x93, 0xb3, 0x53, 0x4b, 0x84, 0xa4, 0xb8, 0x38, 0x8a, 0x41, 0x92, 0x79, 0xc9, 0xa9, 0x12,
-	0x8c, 0x0a, 0x8c, 0x1a, 0x2c, 0x41, 0x70, 0xbe, 0x90, 0x01, 0x17, 0x7b, 0x6a, 0x5e, 0x49, 0x51,
-	0x66, 0x6a, 0xb1, 0x04, 0x93, 0x02, 0xb3, 0x06, 0xb7, 0x91, 0x98, 0x1e, 0xd4, 0x78, 0x3d, 0x98,
-	0x29, 0xae, 0x79, 0x25, 0x45, 0x95, 0x41, 0x30, 0x65, 0x4a, 0x96, 0x5c, 0xbc, 0x28, 0x32, 0x42,
-	0x22, 0x5c, 0xac, 0x25, 0x89, 0x49, 0x39, 0x10, 0xb3, 0x39, 0x83, 0x20, 0x1c, 0x21, 0x21, 0x2e,
-	0x16, 0x90, 0xe3, 0x25, 0x98, 0xc0, 0x82, 0x60, 0xb6, 0x51, 0x38, 0x17, 0x8f, 0x4b, 0x62, 0x49,
-	0x22, 0x4c, 0xbb, 0x90, 0x3b, 0x17, 0x37, 0x92, 0x07, 0x84, 0xa4, 0xe1, 0x56, 0x63, 0x7a, 0x4b,
-	0x4a, 0x1c, 0xc3, 0x5d, 0x10, 0xdf, 0x29, 0x31, 0x18, 0x30, 0x26, 0xb1, 0x81, 0x43, 0xc6, 0x18,
-	0x10, 0x00, 0x00, 0xff, 0xff, 0xe0, 0xca, 0x8f, 0xd0, 0x30, 0x01, 0x00, 0x00,
+	0x62, 0x4f, 0x2f, 0x4a, 0x2c, 0xcb, 0x2c, 0xa9, 0x54, 0xb2, 0xe4, 0x12, 0x77, 0x4f, 0x2d, 0x09,
+	0x86, 0xca, 0x06, 0x97, 0x24, 0x96, 0xa4, 0x06, 0xa5, 0x16, 0x96, 0xa6, 0x16, 0x97, 0x08, 0xc9,
+	0x71, 0x71, 0x25, 0xe7, 0xe7, 0xe4, 0xa4, 0x26, 0x97, 0x64, 0xe6, 0xe7, 0x49, 0x30, 0x2a, 0x30,
+	0x6a, 0x70, 0x06, 0x21, 0x89, 0x28, 0x05, 0x73, 0x89, 0x62, 0x6a, 0x2d, 0xc8, 0xa9, 0x24, 0xa4,
+	0x51, 0x48, 0x8a, 0x8b, 0xa3, 0x18, 0x64, 0x47, 0x5e, 0x72, 0xaa, 0x04, 0x93, 0x02, 0xa3, 0x06,
+	0x4b, 0x10, 0x9c, 0xaf, 0x64, 0xc2, 0x25, 0x84, 0x64, 0x28, 0xb1, 0x4e, 0xa9, 0xe3, 0xe2, 0x83,
+	0x69, 0x09, 0x48, 0x4c, 0xce, 0x4e, 0x2d, 0xa1, 0xc4, 0x0d, 0x42, 0x06, 0x5c, 0xec, 0xa9, 0x79,
+	0x25, 0x45, 0x99, 0xa9, 0xc5, 0x12, 0xcc, 0x0a, 0xcc, 0x1a, 0xdc, 0x46, 0x62, 0x7a, 0xd0, 0xe0,
+	0xd2, 0x83, 0xd9, 0xe2, 0x9a, 0x57, 0x52, 0x54, 0x19, 0x04, 0x53, 0xa6, 0xa4, 0xcc, 0xc5, 0x8b,
+	0x22, 0x23, 0x24, 0xc4, 0xc5, 0x02, 0x0a, 0x76, 0xa8, 0xc5, 0x60, 0xb6, 0xd1, 0x7a, 0x46, 0x2e,
+	0x1e, 0x97, 0xc4, 0x92, 0x44, 0x98, 0x4a, 0xa1, 0x30, 0x2e, 0x01, 0xf4, 0x00, 0x14, 0x52, 0x80,
+	0x5b, 0x85, 0x23, 0x5a, 0xa4, 0xe4, 0xf0, 0xa8, 0x28, 0xc8, 0xa9, 0x54, 0x62, 0x10, 0x72, 0xe7,
+	0xe2, 0x46, 0x92, 0x12, 0x92, 0xc6, 0xa6, 0x01, 0x66, 0x9a, 0x38, 0x86, 0xd7, 0x20, 0x01, 0xa8,
+	0xc4, 0x60, 0xc0, 0x98, 0xc4, 0x06, 0x4e, 0x2c, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xc5,
+	0x3b, 0xd5, 0x3d, 0x43, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -186,6 +286,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type DataSnapshotClient interface {
+	GetSnapshotState(ctx context.Context, in *GetSnapshotStateRequest, opts ...grpc.CallOption) (*GetSnapshotStateReply, error)
 	GetSnapshot(ctx context.Context, in *GetSnapshotRequest, opts ...grpc.CallOption) (DataSnapshot_GetSnapshotClient, error)
 }
 
@@ -195,6 +296,15 @@ type dataSnapshotClient struct {
 
 func NewDataSnapshotClient(cc *grpc.ClientConn) DataSnapshotClient {
 	return &dataSnapshotClient{cc}
+}
+
+func (c *dataSnapshotClient) GetSnapshotState(ctx context.Context, in *GetSnapshotStateRequest, opts ...grpc.CallOption) (*GetSnapshotStateReply, error) {
+	out := new(GetSnapshotStateReply)
+	err := c.cc.Invoke(ctx, "/gravity.DataSnapshot/GetSnapshotState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *dataSnapshotClient) GetSnapshot(ctx context.Context, in *GetSnapshotRequest, opts ...grpc.CallOption) (DataSnapshot_GetSnapshotClient, error) {
@@ -231,6 +341,7 @@ func (x *dataSnapshotGetSnapshotClient) Recv() (*SnapshotPacket, error) {
 
 // DataSnapshotServer is the server API for DataSnapshot service.
 type DataSnapshotServer interface {
+	GetSnapshotState(context.Context, *GetSnapshotStateRequest) (*GetSnapshotStateReply, error)
 	GetSnapshot(*GetSnapshotRequest, DataSnapshot_GetSnapshotServer) error
 }
 
@@ -238,12 +349,33 @@ type DataSnapshotServer interface {
 type UnimplementedDataSnapshotServer struct {
 }
 
+func (*UnimplementedDataSnapshotServer) GetSnapshotState(ctx context.Context, req *GetSnapshotStateRequest) (*GetSnapshotStateReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSnapshotState not implemented")
+}
 func (*UnimplementedDataSnapshotServer) GetSnapshot(req *GetSnapshotRequest, srv DataSnapshot_GetSnapshotServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetSnapshot not implemented")
 }
 
 func RegisterDataSnapshotServer(s *grpc.Server, srv DataSnapshotServer) {
 	s.RegisterService(&_DataSnapshot_serviceDesc, srv)
+}
+
+func _DataSnapshot_GetSnapshotState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSnapshotStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DataSnapshotServer).GetSnapshotState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gravity.DataSnapshot/GetSnapshotState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DataSnapshotServer).GetSnapshotState(ctx, req.(*GetSnapshotStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _DataSnapshot_GetSnapshot_Handler(srv interface{}, stream grpc.ServerStream) error {
@@ -270,7 +402,12 @@ func (x *dataSnapshotGetSnapshotServer) Send(m *SnapshotPacket) error {
 var _DataSnapshot_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "gravity.DataSnapshot",
 	HandlerType: (*DataSnapshotServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetSnapshotState",
+			Handler:    _DataSnapshot_GetSnapshotState_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "GetSnapshot",

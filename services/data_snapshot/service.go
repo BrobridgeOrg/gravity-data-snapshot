@@ -1,10 +1,13 @@
 package data_snapshot
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/nats-io/stan.go"
 	"github.com/prometheus/common/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	app "gravity-data-snapshot/app/interface"
 	pb "gravity-data-snapshot/pb"
@@ -76,7 +79,7 @@ func CreateService(a app.AppImpl) *Service {
 
 func (service *Service) GetSnapshot(in *pb.GetSnapshotRequest, stream pb.DataSnapshot_GetSnapshotServer) error {
 
-	db := service.dbMgr.GetDatabase("users")
+	db := service.dbMgr.GetDatabase(in.Collection)
 	if db == nil {
 		return nil
 	}
@@ -87,4 +90,22 @@ func (service *Service) GetSnapshot(in *pb.GetSnapshotRequest, stream pb.DataSna
 	}
 
 	return nil
+}
+
+func (service *Service) GetSnapshotState(ctx context.Context, in *pb.GetSnapshotStateRequest) (*pb.GetSnapshotStateReply, error) {
+
+	db := service.dbMgr.GetDatabase(in.Collection)
+	if db == nil {
+		return &pb.GetSnapshotStateReply{}, status.Error(codes.NotFound, "No such collection")
+	}
+
+	seq, err := db.GetSequence()
+	if err != nil {
+		return &pb.GetSnapshotStateReply{}, status.Error(codes.NotFound, "Collection has no data")
+	}
+
+	return &pb.GetSnapshotStateReply{
+		Collection: in.Collection,
+		Sequence:   seq,
+	}, nil
 }

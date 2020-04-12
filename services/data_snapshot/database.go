@@ -140,6 +140,28 @@ func (database *Database) DeleteRecord(sequence uint64, key []byte) error {
 	return database.db.Write(batch, nil)
 }
 
+func (database *Database) GetSequence() (uint64, error) {
+
+	// Getting create snapshot
+	snapshot, err := database.db.GetSnapshot()
+	if err != nil {
+		return 0, err
+	}
+	defer snapshot.Release()
+
+	// Getting current sequence number of event
+	var seq uint64
+	seqData, err := snapshot.Get([]byte("seq"), nil)
+	if err != nil {
+		log.Warn("Not found seq in database, it will be set zero by default.")
+		seq = 0
+	} else {
+		seq = BytesToUint64(seqData)
+	}
+
+	return seq, nil
+}
+
 func (database *Database) FetchSnapshot(stream pb.DataSnapshot_GetSnapshotServer) error {
 
 	// Getting create snapshot
@@ -158,17 +180,21 @@ func (database *Database) FetchSnapshot(stream pb.DataSnapshot_GetSnapshotServer
 		seq = BytesToUint64(seqData)
 	}
 
+	log.WithFields(log.Fields{
+		"collection": database.name,
+		"seq":        seq,
+	}).Info("Client requests data")
+
 	iter := snapshot.NewIterator(util.BytesPrefix([]byte("key-")), nil)
 	//	iter := database.db.NewIterator(nil, nil)
 	for iter.Next() {
-		log.Info(string(iter.Value()))
 		entry := pb.SnapshotEntry{
-			Table: database.name,
-			Data:  string(iter.Value()),
+			Data: string(iter.Value()),
 		}
 
 		var packet pb.SnapshotPacket
 
+		packet.Collection = database.name
 		packet.Sequence = seq
 		packet.Entries = []*pb.SnapshotEntry{
 			&entry,
