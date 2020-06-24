@@ -1,22 +1,31 @@
 package eventbus
 
 import (
+	"time"
+
+	"github.com/nats-io/nats.go"
 	stan "github.com/nats-io/stan.go"
 	log "github.com/sirupsen/logrus"
 )
 
 type EventBus struct {
-	host       string
-	clusterID  string
-	clientName string
-	client     stan.Conn
+	host              string
+	clusterID         string
+	clientName        string
+	client            stan.Conn
+	natsConn          *nats.Conn
+	reconnectHandler  func(natsConn *nats.Conn)
+	disconnectHandler func(natsConn *nats.Conn)
 }
 
-func CreateConnector(host string, clusterID string, clientName string) *EventBus {
+func CreateConnector(host string, clusterID string, clientName string, reconnectHandler func(natsConn *nats.Conn), disconnectHandler func(natsConn *nats.Conn)) *EventBus {
 	return &EventBus{
-		host:       host,
-		clusterID:  clusterID,
-		clientName: clientName,
+		host:              host,
+		clusterID:         clusterID,
+		clientName:        clientName,
+		natsConn:          nil,
+		reconnectHandler:  reconnectHandler,
+		disconnectHandler: disconnectHandler,
 	}
 }
 
@@ -28,8 +37,28 @@ func (eb *EventBus) Connect() error {
 		"clusterID":  eb.clusterID,
 	}).Info("Connecting to event server")
 
+	if eb.natsConn == nil {
+		// Create NATS connection
+		nc, err := nats.Connect(eb.host,
+			nats.PingInterval(10*time.Second),
+			nats.MaxPingsOutstanding(3),
+			nats.MaxReconnects(-1),
+			nats.ReconnectHandler(eb.reconnectHandler),
+			nats.DisconnectHandler(eb.disconnectHandler),
+		)
+		if err != nil {
+			return err
+		}
+
+		eb.natsConn = nc
+	}
+
 	// Connect to queue server
-	sc, err := stan.Connect(eb.clusterID, eb.clientName, stan.NatsURL(eb.host))
+	sc, err := stan.Connect(
+		eb.clusterID,
+		eb.clientName,
+		stan.NatsConn(eb.natsConn),
+	)
 	if err != nil {
 		return err
 	}
