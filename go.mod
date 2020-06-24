@@ -3,7 +3,6 @@ module gravity-data-snapshot
 go 1.13
 
 require (
-	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.3.2
 	github.com/nats-io/nats-streaming-server v0.17.0 // indirect
 	github.com/nats-io/nats.go v1.9.1
@@ -13,6 +12,5 @@ require (
 	github.com/sony/sonyflake v1.0.0
 	github.com/spf13/viper v1.6.2
 	github.com/syndtr/goleveldb v1.0.0
-	golang.org/x/net v0.0.0-20190522155817-f3200d17e092
 	google.golang.org/grpc v1.21.0
 )

@@ -3,7 +3,7 @@ package eventbus
 import (
 	"time"
 
-	"github.com/nats-io/nats.go"
+	nats "github.com/nats-io/nats.go"
 	stan "github.com/nats-io/stan.go"
 	log "github.com/sirupsen/logrus"
 )
