@@ -26,6 +26,7 @@ func init() {
 	}
 }
 
+//go:generate protoc --go_out=plugins=grpc:. pb/data_snapshot.proto
 func main() {
 
 	// Initializing application

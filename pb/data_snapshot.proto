@@ -27,5 +27,5 @@ message SnapshotPacket {
 }
 
 message SnapshotEntry {
-  string data = 1;
+  bytes data = 1;
 }

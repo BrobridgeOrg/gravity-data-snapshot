@@ -59,6 +59,7 @@ func BytesToUint64(data []byte) uint64 {
 
 func (database *Database) ProcessData(sequence uint64, projection *Projection) error {
 
+	// Get primary key
 	var primaryKey []byte
 	hasPrimary := false
 	for _, field := range projection.Fields {
@@ -70,6 +71,7 @@ func (database *Database) ProcessData(sequence uint64, projection *Projection) e
 
 			primaryKey = key
 			hasPrimary = true
+			break
 		}
 	}
 
@@ -197,7 +199,7 @@ func (database *Database) FetchSnapshot(stream pb.DataSnapshot_GetSnapshotServer
 	for iter.Next() {
 
 		entry := &pb.SnapshotEntry{
-			Data: string(iter.Value()),
+			Data: iter.Value(),
 		}
 
 		packet.Entries = append(packet.Entries, entry)
