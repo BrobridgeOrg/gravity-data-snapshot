@@ -1,44 +1,46 @@
 package app
 
 import (
+	"fmt"
 	"gravity-data-snapshot/app/eventbus"
 	app "gravity-data-snapshot/app/interface"
+	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/nats-io/nats.go"
 	log "github.com/sirupsen/logrus"
-	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
 )
 
 type App struct {
-	id       uint64
-	flake    *sonyflake.Sonyflake
+	id       string
 	eventbus *eventbus.EventBus
 	isReady  bool
 }
 
 func CreateApp() *App {
 
-	// Genereate a unique ID for instance
-	flake := sonyflake.NewSonyflake(sonyflake.Settings{})
-	id, err := flake.NextID()
+	// Using hostname (pod name) by default
+	host, err := os.Hostname()
 	if err != nil {
+		log.Error(err)
 		return nil
 	}
 
-	idStr := strconv.FormatUint(id, 16)
+	host = strings.ReplaceAll(host, ".", "_")
+
+	id := fmt.Sprintf("gravity_data_snapshot-%s", host)
 
 	a := &App{
-		id:    id,
-		flake: flake,
+		id: id,
 	}
 
 	a.eventbus = eventbus.CreateConnector(
 		viper.GetString("event_store.host"),
 		viper.GetString("event_store.cluster_id"),
-		idStr,
+		id,
 		func(natsConn *nats.Conn) {
 
 			for {
