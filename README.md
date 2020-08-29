@@ -1,6 +1,6 @@
 # Gravity Data Snapshot
 
-Data snapshot for efficient data recovery
+Data snapshot component is used to realize efficient data recovery for CQRS. Event though event sourcing can be used to recovery data, it spends much time on re-playing events. In this case, it lead to slow data sycing for creating a new data database or rebuild a new one.
 
 ## Update proto definition
 
